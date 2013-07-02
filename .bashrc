@@ -6,12 +6,11 @@ if [ -f /etc/bashrc ]; then
 fi
 export TERM="xterm"
 
-PS1="\[$(tput setaf 1)\]\u $(tput setaf 3)>$(tput setaf 1)rama$(tput setaf 3)<$(tput setaf 1) \w >> \[$(tput sgr0)\]"
+PS1="\[$(tput setaf 1)\]\u $(tput setaf 3)>$(tput setaf 1)$(hostname | tr '[A-Z]' '[a-z]')$(tput setaf 3)<$(tput setaf 1) \w >> \[$(tput sgr0)\]"
 #fi
 #PS1="\e[0;31m \u >> \e[m\W $ "
 
-
-eval `dircolors -b /home/kzz5/.dir_colors`
+eval `dircolors -b ~/.dir_colors`
 
 alias ls="ls --color=auto"
 alias htpc="ssh -p 55255 htpc -X"
@@ -20,7 +19,7 @@ alias htpcinternetvnc="ssh -L  5901:localhost:5901 kzz5@kzz5.com -p 55255"
 alias pc="ssh pc -X"
 alias pi="ssh pi@pi"
 alias piinternet="ssh pi@kzz5.com -p 55355"
-alias down="cd /ramastuff/Downloads"
+alias down="cd /$(hostname | tr '[A-Z]' '[a-z]')stuff/Downloads"
 
 ###########################
 alias vpn="sudo pon work && sleep 5  && ifconfig | grep ppp"

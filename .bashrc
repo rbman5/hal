@@ -13,12 +13,12 @@ PS1="\[$(tput setaf 1)\]\u $(tput setaf 3)>$(tput setaf 1)$(hostname | tr '[A-Z]
 eval `dircolors -b ~/.dir_colors`
 
 alias ls="ls --color=auto"
-alias htpc="ssh -p 55255 htpc -X"
-alias htpcinternet="ssh -A kzz5.com -p 55255 -X"
-alias htpcinternetvnc="ssh -L  5901:localhost:5901 kzz5@kzz5.com -p 55255"
+alias htpc="ssh htpc -X"
+alias htpcinternet="ssh -A kzz5.com -X"
+alias htpcinternetvnc="ssh -L  5901:localhost:5901 kzz5@kzz5.com"
 alias pc="ssh pc -X"
 alias pi="ssh pi@pi"
-alias piinternet="ssh pi@kzz5.com -p 55355"
+alias piinternet="ssh pi@kzz5.com"
 alias down="cd /$(hostname | tr '[A-Z]' '[a-z]')stuff/Downloads"
 
 ###########################
@@ -51,7 +51,7 @@ alias screenvnc="screen xllvnc -display :0"
 alias nautilus="nemo"
 alias wget='wget -c'
 alias localinstall='sudo yum localinstall --nogpgcheck'
-alias htpcnox='ssh -p 55255 htpc'
+alias htpcnox='ssh htpc'
 alias oct="stat -c '%a %n'"
 export PATH=$PATH:/home/kzz5/AndroidSDK/platform-tools
 alias jd="screen java -jar '/home/kzz5/JDownloader/JDownloader.jar'&"
@@ -112,7 +112,7 @@ sleep "$min" && zenity --info --text "$2" &
 ################################################
 function sendtohtpc()
 {
-scp -P 55255 "$1" kzz5@htpc:/home/kzz5
+scp "$1" kzz5@htpc:/home/kzz5
 }
 
 

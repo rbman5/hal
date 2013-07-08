@@ -12,7 +12,7 @@ PS1="\[$(tput setaf 1)\]\u $(tput setaf 3)>$(tput setaf 1)$(hostname | tr '[A-Z]
 
 eval `dircolors -b ~/.dir_colors`
 
-alias gp="git add .bashrc .dir_colors && git commit -m 'hi' && git push origin master"
+alias gp="git add .bashrc .dir_colors .mybashsetup.sh && git commit -m 'hi' && git push origin master"
 alias ls="ls --color=auto"
 alias htpc="ssh htpc -X"
 alias htpcinternet="ssh -A kzz5.com -X"

@@ -18,8 +18,8 @@ alias htpc="ssh htpc -X"
 alias htpcinternet="ssh -A kzz5.com -X"
 alias htpcinternetvnc="ssh -L  5901:localhost:5901 kzz5@kzz5.com"
 alias pc="ssh pc -X"
-alias pi="ssh pi@pi"
-alias piinternet="ssh pi@kzz5.com"
+alias pi="ssh pi@tardis"
+alias piinternet="ssh pi@tardis.kzz5.com"
 alias down="cd /$(hostname | tr '[A-Z]' '[a-z]')stuff/Downloads"
 
 ###########################

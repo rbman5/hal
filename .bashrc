@@ -21,7 +21,8 @@ alias pc="ssh pc -X"
 alias pi="ssh pi@tardis"
 alias piinternet="ssh pi@tardis.kzz5.com"
 alias down="cd /$(hostname | tr '[A-Z]' '[a-z]')stuff/Downloads"
-
+alias fixbash="PS1='\u $(hostname | tr '[A-Z]' '[a-z]') \w  >> '"
+fixbash
 ###########################
 alias vpn="sudo pon work && sleep 5  && ifconfig | grep ppp"
 alias kvpn="sudo poff work"

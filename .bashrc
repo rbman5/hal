@@ -12,7 +12,7 @@ PS1="\[$(tput setaf 1)\]\u $(tput setaf 3)>$(tput setaf 1)$(hostname | tr '[A-Z]
 
 eval `dircolors -b ~/.dir_colors`
 
-alias gp="git add .bashrc .dir_colors .mybashsetup.sh && git commit -m 'hi' && git push origin master"
+alias gp="git add ~/.bashrc ~/.dir_colors ~/.mybashsetup.sh && git commit -m 'hi' && git push origin master"
 alias ls="ls --color=auto"
 alias htpc="ssh htpc -X"
 alias htpcinternet="ssh -A kzz5.com -X"
@@ -95,8 +95,8 @@ function extract () {
 ##################################################
 
 # Usage "bu filename.txt"
-function bu() { cp $1 ${1}-`date +%Y%m%d%H%M`.backup ; }
-
+function bu() { cp $1 ${1}-`date +%Y%m%d%H%M`.bak ; }
+function bak() { cp $1 ${1}-`date +%Y%m%d%H%M`.bak ; }
 # Creates an archive from directory		 #
 function mktbz() { tar cvjf "${1%%/}.tar.bz2" "${1%%/}/"; }
 
@@ -120,3 +120,5 @@ scp "$1" kzz5@htpc:/home/kzz5
 
 # merge session histories
 shopt -s histappend
+
+export HISTTIMEFORMAT="%F %T "

@@ -1,0 +1,11 @@
+#!/bin/bash
+#
+file_time_size=$(stat --format=%y-%s "$@")	
+file_time_size=${file_time_size//.*-/-}	
+file_time=${file_time_size%-*}
+file_size=${file_time_size##*-}
+second=${file_time:18:19}
+incomplete_time=${file_time:0:18}
+new_cover_name=$incomplete_time$second-$file_size
+echo  $new_cover_name > log.txt
+

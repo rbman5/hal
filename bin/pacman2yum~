@@ -1,0 +1,17 @@
+#!/bin/bash
+
+case "$1" in
+    search)
+        echo "yum search ${@:2}"
+    ;;
+    install)
+       echo "yum install ${@:2}"
+    ;;
+    update)
+	echo "yum update ${@:2}"
+    ;;
+    *)
+    echo "Usage: $0 {start|stop|restart}"
+    exit 1
+    ;;
+esac

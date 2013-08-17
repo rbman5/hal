@@ -1,0 +1,102 @@
+#!/bin/bash
+#
+# Script to download files using download.me
+# Written by kzz5
+
+function setupdm {
+
+	if [ ! -d "/home/kzz5/.dme" ]; then
+		mkdir -pv ~/.dme/temp
+	fi
+	log "$1" "will be downloaded" "1"
+	
+	username="dl@kzz5.com"						#  CHANGE ME!!!!!!
+	password=`cat ~/.dmepwd`						#  CHANGE ME!!!!!!
+	login "$1" "$username" "$password"
+}
+
+function login {
+	
+	echo "Logging in.."
+	login=$(curl -k -c /home/kzz5/.dme/cookie.txt https://www.download.me/dlapi/user?mail=${2}\&passwd=${3} 2> /dev/null)
+	check=$(echo $login | grep premuntil)
+	if [ ! -z "$check" ]; then
+		log "$login" "Successful login" "1"
+		checkhost "$1"
+	else
+		log "$login" "Error logging in or no premium" "1"
+		echo Error logging in $login
+	fi
+}
+
+function checkhost {
+	
+	domain=$(echo $1 | awk -F/ '{print $3}')
+	curl -k -b ~/.dme/cookie.txt -o ~/.dme/supportedhosts https://www.download.me/dlapi/hosters > /dev/null 2>&1
+	if [ ! -z $(grep "$domain" ~/.dme/supportedhosts) ]; then
+		getid "$1"
+	else
+		echo Host not supported
+		log "$domain" "not supported, file cannot be downloaded" "1"
+	fi
+}	
+
+function getid {
+	
+	echo "login succesfull, uploading link to D.ME"
+	curl -k -b ~/.dme/cookie.txt -o ~/.dme/temp/getid https://www.download.me/dlapi/file?url=$1 > /dev/null 2>&1
+	dlid=`cat ~/.dme/temp/getid | awk -F\" '{print $8}'`
+	log "$dlid" "is the ID number" "1"
+	geturl "$dlid"
+}
+
+function geturl {
+
+	echo "waiting for D.ME to generate URL.."
+	curl -k -b ~/.dme/cookie.txt -o ~/.dme/temp/geturl https://www.download.me/dlapi/file?id=$1 > /dev/null 2>&1
+	url=`cat ~/.dme/temp/geturl | awk -F\" '{print $20}'`
+	time=0
+	log "$url" "checking URL" "1"
+	while [[ -z "$url" && "$time" -lt "60" ]]
+	do
+		curl -k -b ~/.dme/cookie.txt -o ~/.dme/temp/geturl https://www.download.me/dlapi/file?id=$1 > /dev/null 2>&1
+		sleep 3
+		url=`cat ~/.dme/temp/geturl | awk -F\" '{print $20}'`
+		time=$(( $time + 1))
+	done
+	
+	log "$time" "loops processed"
+	
+	exists=`cat ~/.dme/temp/geturl | awk -F\" '{print $12}'`
+	
+	if [ "$exists" != "0" ]; then
+		download "$url"
+	else
+		log "$url $exists size" "does not exist*************************" "1"
+		echo "$url" does not exist
+	fi
+}
+
+function download {
+	
+	echo "Starting download.."
+	cleanurl=$(echo $1 | sed -e 's/\\//g')
+	log "$cleanurl" "is being downloaded now" "1"
+	wget -c --load-cookies ~/.dme/cookie.txt -P ~/Downloads $cleanurl
+	wgetexitstatus=$?
+	log "$wgetexitstatus" "exit status of final wget command" "1"
+}
+
+function log {
+
+	if [ "$3" = "1" ]; then
+		echo " $1" $2  | sed "s/^/$(date)/" >> ~/.dme/dme.log
+	else
+		echo " $1" $2 >> ~/.dme/dme.log
+	fi
+}
+
+for arg
+do
+	setupdm "$arg"
+done

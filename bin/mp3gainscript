@@ -1,0 +1,7 @@
+#!/bin/bash
+#
+for file in /home/kzz5/Downloads/downloads/*
+do
+	mp3gain -r -c -d 8 "$file"
+	#mp3gain -u "$file"
+done

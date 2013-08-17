@@ -1,0 +1,10 @@
+#!/bin/bash
+sshport=55255
+if [ -d /mnt/htpcstuff/backup ]; then
+	rsync -av --progress -e "ssh -p $sshport" /mnt/Videos/ "kzz5@192.168.1.22:/mnt/htpcstuff/Videos"
+	#rsync -av --delete /mnt/Stuff/Music /mnt/htpcstuff/
+	echo "last sync ran $(date +'on %b %d at %H:%M')" > /stuff/logs/synchtpcmedia.log
+fi
+
+#rsync -av --delete /mnt/Stuff/Videos /mnt/htpcstuff/
+#rsync -av --delete /mnt/Stuff/Music /mnt/htpcstuff/

@@ -1,0 +1,142 @@
+#!/bin/sh
+#
+#Get Cubs next game, previous game, and current game by kzz5 
+#
+#
+# find_game takes 2 parameters of times in seconds the first being how many days(in seconds) ahead or previous or 0 for today
+# the second being the direction the while loop should go i.e if im looking for the previous game i want to go back in time 
+# this current script is working on desktop
+#wget http://espn.go.com/mlb/team/schedule/_/name/chc/chicago-cubs -O /tmp/schedule
+function find_game { 
+    file=$3
+    day=$(date +'%a, %b %d' --date="$1 days")
+    date=""
+    dayinterval=0
+    single=$(date +'%d' --date="$1 days" ) # get day of month
+        single2="$(echo $single | cut -c1-1)"
+    if [[ $single2 = 0 ]]; then # if day of month is 1-9 
+            day=$(echo $day | sed 's/0//') # remove the leading 0, i.e 01, 02, 03
+        fi
+    while [[ -z "$date" ]];
+    do
+       # game=$(busybox date -D %s -d $(($dayinsec)) +'%a, %b %d') # get the next/prev/current day
+        
+        #echo day$day
+        date=$(cat /tmp/schedule | sed -e 's#<[^>]*>##g' | sed -e 's/^[ \t]*//' | grep -v '^$' | grep -w "$day") # see if the cubs are playing that day
+        #echo datte$date
+        dayinterval=$(( $dayinterval + $2)) # $1 find_game - or + seconds
+       if [ $dayinterval -gt 10 ]; then
+            exit
+       fi
+        if [ $2 = 0 ]; then # contingency if no game is being played today
+           break 1
+        fi
+        day=$(date +'%a, %b %d' --date="$dayinterval days")
+        single=$(date +'%d' --date="$dayinterval days") # get day of mont
+        
+        if [[ $(echo $single | cut -c1-1) = 0 ]]; then # if day of month is 1-9 
+            day=$(echo $day | sed 's/0//') # remove the leading 0, i.e 01, 02, 03
+        fi
+    done
+    if [[ -n $date ]]; then
+        cubs=$(cat /tmp/schedule | sed -e 's#<[^>]*>##g' | sed -e 's/^[ \t]*//' | grep -v '^$' | grep -A 3 "$date")
+        format_game "$cubs"
+    else
+        echo "NO GAME TODAY" #> /mnt/Stuff/Dropbox/Public/cubs/$file
+        #echo "." >> /mnt/Stuff/Dropbox/Public/cubs/$file
+        #echo "." >> /mnt/Stuff/Dropbox/Public/cubs/$file
+       # echo "." >> /mnt/Stuff/Dropbox/Public/cubs/$file
+        #echo "." >> /mnt/Stuff/Dropbox/Public/cubs/$file
+    fi
+
+}
+function format_game { # this function just formats all the data so I can play around with the data in minimalist text using Tasker
+    IFS=$'\n'
+    p=1
+    for i in $1; do
+       
+        case $p in
+            "1") 
+                firstline=$i # Date of game
+                
+                ;;
+            "2") 
+                secondline=$i # opponent
+                
+                ;;
+            "3") 
+                time=$i # time of game
+                
+                ;;
+        esac
+            p=$(($p + 1))
+    done
+    
+    firstchar="$(echo $time | cut -c1-1)" # get first digit, ie a number or W or L
+
+    homeoraway="$(echo $secondline | cut -c1-1)" # gives me a VS for home game or @ for an away game, again to use in minimalist text for formating purposes
+
+    if [[ $homeoraway = "@" ]]; then
+	    oponent=$(echo $secondline | cut -c2-)
+    else
+	    homeoraway=$(echo $secondline | cut -c1-2)
+	    oponent=$(echo $secondline | cut -c3-)
+    fi
+	
+  
+    
+#           ESPN gives game times in eastern time zone, i wanted Central, hence the chopping up of the time
+
+    rest="$(echo $time | cut -c2-)" # get rest of string if time is 1 digit i.e 1:05pm
+
+    rest2="$(echo $time | cut -c3-)" # get rest of string if time is 2 digits i.e 12:05pm 
+
+    test="$(echo $time | cut -c2-2)" # test if character 2 is :
+
+    test1="$(echo $time | cut -c1-1)" # get character 1 if 2 is :
+
+    test2="$(echo $time | cut -c1-2)" # get characters 1-2 if 2 is a number
+
+    test3="$(echo $time | cut -c3-3)" # get 3rd character
+
+    if [ "$firstchar" != "W" -o "$firstchar" != "L"  ]; then #          Outcome of game if it has/hasn't ended etc. then converts time to central
+        
+        if [[ $test = ":" ]]; then
+            num=$test1
+            num=$(expr $num + 12)
+            num=$(expr $num - 13)
+            
+            if [ $num = 0 ]; then
+                num=12
+            fi
+            
+            time=$num$rest # time of game now in CDT
+            
+        fi 
+        if [[ $test3 = ":" ]]; then
+            num=$test2
+            num=$(expr $num + 12)
+            num=$(expr $num - 13)
+            time=$num$rest2 # time of game now in CDT
+        fi
+        
+        #echo $time # time of game in CDT
+    fi
+#echo "$file"
+if [ $file = "Today" ]; then
+    echo "Today Cubs $homeoraway $oponent $time" #> /mnt/Stuff/Dropbox/Public/cubs/$file
+else
+echo "$firstline Cubs $homeoraway $oponent $time" #> /mnt/Stuff/Dropbox/Public/cubs/$file
+fi
+#echo Cubs #>> /mnt/Stuff/Dropbox/Public/cubs/$file
+#echo $homeoraway #>> /mnt/Stuff/Dropbox/Public/cubs/$file
+#echo $oponent #>> /mnt/Stuff/Dropbox/Public/cubs/$file
+#echo "$secondline" >> /mnt/Stuff/Dropbox/Public/cubs/$file
+#echo "$time" #>> /mnt/Stuff/Dropbox/Public/cubs/$file
+
+}
+#find_game "-1" "-1" "Prev"
+
+find_game "0" "0" "Today"
+
+#find_game "1" "1" "Next"

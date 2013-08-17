@@ -1,0 +1,15 @@
+#!/bin/sh
+
+#rsync -av --delete --exclude '.gvfs' /home/kzz5 /mnt/stuff/backup/$(awk '{ print $4 }' /etc/fedora-release | sed 's/(//' | sed 's/)//')
+rsync -av --delete --exclude '.gvfs' /home/kzz5 /mnt/stuff/backup/$(echo $HOSTNAME).$(grep DESC /etc/linuxmint/info | sed 's/\"//g' | sed 's/DESCRIPTION\=//g')
+
+#echo "Last sync ran $(date +'on %b %d at %H:%M')" > /mnt/stuff/backup/$(echo $HOSTNAME).$(grep DESC /etc/linuxmint/info | sed 's/\"//g' | sed 's/DESCRIPTION\=//g')
+/sync.log
+
+#rsync -av --delete /etc /mnt/stuff/backup/$(awk '{ print $4 }' /etc/fedora-release | sed 's/(//' | sed 's/)//')
+rsync -av --delete /etc /mnt/stuff/backup/$(echo $HOSTNAME).$(grep DESC /etc/linuxmint/info | sed 's/\"//g' | sed 's/DESCRIPTION\=//g')
+
+echo "last sync ran $(date +'on %b %d at %H:%M')" > /mnt/stuff/backup/$(echo $HOSTNAME).$(grep DESC /etc/linuxmint/info | sed 's/\"//g' | sed 's/DESCRIPTION\=//g')
+/sync.log
+
+#notify-send --hint=int:transient:1 "/home/kzz5 was rsyncd"

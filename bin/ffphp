@@ -1,0 +1,35 @@
+<?php
+// INIT CURL
+$ch = curl_init();
+
+// SET URL FOR THE POST FORM LOGIN
+curl_setopt($ch, CURLOPT_URL, 'http://www.filefactory.com/member/login.php');
+
+// ENABLE HTTP POST
+curl_setopt ($ch, CURLOPT_POST, 1);
+
+// SET POST PARAMETERS : FORM VALUES FOR EACH FIELD
+curl_setopt ($ch, CURLOPT_POSTFIELDS, 'email=rbman5@gmail.com&password=here');
+
+// IMITATE CLASSIC BROWSER'S BEHAVIOUR : HANDLE COOKIES
+curl_setopt ($ch, CURLOPT_COOKIEJAR, '/home/kzz5/.ff/ffcookies.txt');
+
+# Setting CURLOPT_RETURNTRANSFER variable to 1 will force cURL
+# not to print out the results of its query.
+# Instead, it will return the results as a string return value
+# from curl_exec() instead of the usual true/false.
+curl_setopt ($ch, CURLOPT_RETURNTRANSFER, 1);
+
+// EXECUTE 1st REQUEST (FORM LOGIN)
+$store = curl_exec ($ch);
+
+// SET FILE TO DOWNLOAD
+curl_setopt($ch, CURLOPT_URL, 'http://www.filefactory.com/file/c3c9a21/n/The.Walking.Dead.S02E09.HDTV.XviD-ASAP.avi');
+
+// EXECUTE 2nd REQUEST (FILE DOWNLOAD)
+$content = curl_exec ($ch);
+
+// CLOSE CURL
+curl_close ($ch); 
+
+?>

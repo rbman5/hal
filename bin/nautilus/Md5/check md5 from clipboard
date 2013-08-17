@@ -1,0 +1,28 @@
+#!/bin/bash
+
+# AUTHOR:	(c) Tony Mattsson <tony_mattsson@home.se>
+# VERSION:	1.0
+# LICENSE:	GPL (http://www.gnu.org/licenses/gpl.html)
+# REQUIRES:	
+# NAME:		Make md5
+# DESCRIPTION:	
+
+# Check that the user didn't select directories
+for File in "$@"
+do
+if [ -d "$File" ]; then
+zenity --error --text="'$File' is a directory.
+Make md5 cannot handle directories."
+exit
+fi
+done
+
+# 1 Check the md5 file
+md5=$(md5sum "$@") 
+clipboard=$(xsel --clipboard)
+md5clip="$clipboard  ""$@"
+if [ "$md5" = "$md5clip" ]; then
+	zenity --info --window-icon=/home/kzz5/.gnome2/nautilus-scripts/success.png --text "MD5 of '$File' is correct"
+else
+	zenity --error --text "MD5 of '$File' is wrong"
+fi

@@ -1,0 +1,29 @@
+#!/bin/bash
+#
+for arg
+do
+	filename=$(echo ${arg##*/}) # get file name with spaces
+
+	newname=${filename%.mkv} # cut off .mkv and a space after the mkv
+
+	checkmkv=$(mediainfo "--Inform=General;%Format%" "$filename")
+
+	if [ $checkmkv = "Matroska" ]; then
+
+		audio=$(mediainfo "--Inform=Audio;%Format%" "$arg")
+		audioex=$(echo $audio | tr "[:upper:]" "[:lower:]") # convert audio extension to lowercase aesthetic purposes
+
+		mkvextract tracks "$arg" 1:"$newname".264 2:"$newname"."$audioex" # extract audo/video from mkv
+
+		audiocheck=$(mediainfo "--Inform=Audio;%Format%" "$newname"."$audioex")
+	
+		if [ -z "$audiocheck" ]; then
+
+			mv "$newname"."$audioex" "$newname".temp
+			mv "$newname".264 "$newname"."$audioex"
+			mv "$newname".temp "$newname".264
+		fi
+	else
+		zenity --error --timeout="5" --text  "File  '$newname.mkv'  could not be identified as a Matroska file!"
+	fi
+done

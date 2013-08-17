@@ -1,0 +1,4 @@
+#!/bin/bash
+#
+#cd '/mnt/Stuff/linux/JDownloader'
+java -jar ~/JDownloader/JDownloader.jar

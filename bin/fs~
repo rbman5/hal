@@ -1,0 +1,11 @@
+#!/bin/bash
+
+if [ ! -d "/home/kzz5/.fs" ]; then
+	mkdir ~/.fs
+fi
+curl --cookie-jar ~/.fs/fscookies.txt --data "loginUserName=rbman5" --data "loginUserPassword=fuckyoucunt4" --data "autoLogin=checked" --data "loginFormSubmit=Login" http://www.fileserve.com/login.php > /dev/null
+
+for arg
+do
+wget -c --load-cookies ~/.fs/fscookies.txt -P /stuff/Downloads $arg
+done

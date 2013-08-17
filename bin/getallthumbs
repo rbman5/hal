@@ -1,0 +1,8 @@
+#!/bin/bash
+for file in /media/Videos\ and\ Shit/Videos/Movies/*/*
+do
+	filename=$(echo ${file##*/})
+        name=$(md5sum "$file")
+	name=${name:0:32}
+	mv "/home/kzz5/.thumbnails/normal/$name.png" "/media/Videos and Shit/Videos/Thumbnails/1/$filename.cover.png"
+done

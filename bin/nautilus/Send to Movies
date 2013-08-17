@@ -1,0 +1,15 @@
+#!/bin/bash
+#
+# script to move movie files to correct movie folder
+
+filename=$(echo ${@##*/}) # get filename
+extension=$(echo ${filename:(-3)}) # get file extension, does not include .
+if [ $extension = "mkv" -o $extension = "mp4" -o $extension = "avi" -o $extension = "mpg" ] ; then # if extension is a movie file i use
+	for i in "$filename"; do B=`echo -n "${i:0:1}" | tr "[:lower:]" "[:upper:]"`; echo -n "${B}${i:1} "; done
+	if [ ! -d "/media/Videos and Shit/Videos/Movies/$B" ]; then # if directory doesnt exist create it
+		mkdir "/media/Videos and Shit/Videos/Movies/$B"
+	fi
+	mv "$@" "/media/Videos and Shit/Videos/Movies/$B" # move file to correct folder according to title
+else
+	zenity --error --text "File is not a movie!"
+fi

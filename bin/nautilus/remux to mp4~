@@ -1,0 +1,16 @@
+#!/bin/bash
+#
+# $@ is file
+for filename in $@
+do
+	name="$name$filename "
+done
+newname=${name%.mkv }
+
+mkvextract tracks "$@" 1:"$newname".264 2:"$newname".aac
+
+fps=$(mediainfo "--Inform=Video;%FrameRate%" "$newname".264)
+
+MP4Box -add "$newname".264:fps=$fps -add "$newname".aac "$newname".mp4
+
+rm "$newname".264 "$newname".aac

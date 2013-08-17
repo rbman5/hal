@@ -1,0 +1,9 @@
+#!/bin/bash
+for file in /mnt/Stuff/Videos/Movies/*/*
+do
+	filename=$(echo ${file##*/})
+	if [ ! -h "/mnt/Stuff/Videos/Movies/All/$filename" ]; 
+	then
+    		ln -s  "$file" /mnt/Stuff/Videos/Movies/All
+	fi
+done

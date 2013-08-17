@@ -1,0 +1,5 @@
+#!/bin/bash
+if [ -d /mnt/htpcstuff/backup ]; then
+	rsync -av --delete /stuff/linux /htpcstuff
+	echo "last sync ran $(date +'on %b %d at %H:%M')" > /stuff/logs/rsync_linux.log
+fi

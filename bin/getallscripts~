@@ -1,0 +1,6 @@
+#!/bin/bash
+for file in /home/kzz5/.gnome2/nautilus-scripts/Md5/*
+do
+    #cp "$file" /media/Videos\ and\ Shit/Linux\ Files/scripts/nautilus
+    ln "$file" /media/Videos\ and\ Shit/Linux\ Files/scripts/nautilus/"$file"
+done

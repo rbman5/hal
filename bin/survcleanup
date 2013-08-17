@@ -1,0 +1,4 @@
+#!/bin/bash
+#
+cd /media/Stuff/Dropbox/Public/Surv
+rm *.jpg

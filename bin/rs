@@ -1,0 +1,17 @@
+#!/bin/bash
+
+if [ ! -d "/home/kzz5/.rs" ]; then
+	mkdir ~/.rs
+fi
+
+/usr/bin/php ~/bin/rsphp
+
+for arg
+do
+wget -c --load-cookies ~/.rs/rscookies.txt -P ~/Downloads $arg
+done
+
+
+
+#command to get link from warez
+# grep -A 10 "Download Latest Episode" viewtopic.php\?t\=7103831 | sed -e 's#<[^>]*>##g' | sed -e 's/^[ \t]*//' | grep fileserve | sed 's/\&#58;/\:/'

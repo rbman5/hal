@@ -1,0 +1,70 @@
+#!/bin/bash
+# 
+# Remux MKV file to MP4 by kzz5
+# for arg = for each selected file
+for arg
+do
+	filename=$(echo ${arg##*/}) # get file name with spaces
+
+	newname=${filename%.mkv} # cut off .mkv and a space after the mkv
+
+	checkmkv=$(mediainfo "--Inform=General;%Format%" "$filename")
+
+	if [ $checkmkv = "Matroska" ]; then #  Checks that the file is a true Matroska file
+
+		if [ ! -f "$newname"".mp4" ]; then # if the mp4 doesn't already exist
+
+			profile=$(mediainfo "--Inform=Video;%Format_Profile%" "$arg") # check 264 profile, 4.1 etc
+			if [ -z $profile ]; then 
+				profile="unknown" 
+			fi
+			
+			audio=$(mediainfo "--Inform=Audio;%Format%" "$arg") # read audio stream
+			audioex=$(echo $audio | tr "[:upper:]" "[:lower:]") # convert audio extension to lowercase aesthetic purposes
+	
+			if [ $audio = "AAC" ]; then  # check audio is AAC
+
+				proceed=$(zenity --question --timeout="5" --title="264 Profile" --text "Profile for  '$newname'  is $profile, proceed?"; echo $?)
+
+				if [ $proceed = 0 -o $proceed = 5 ]; then
+
+					mkvextract tracks "$arg" 1:"$newname".264 2:"$newname"."$audioex" # extract audo/video from mkv
+
+					fps=$(mediainfo "--Inform=Video;%FrameRate%" "$newname".264) # get fps of video
+					if [ -z $fps ]; then
+						fps="23.976"
+						zenity --info --timeout="3" --text "FPS for '$newname.mkv' not found. Defaulted to 23.976"
+					fi
+
+					mp4boxerror=$(MP4Box -add "$newname".264:fps=$fps -add "$newname"."$audioex" "$newname".mp4) # create mp4
+					Error="Error"
+					if [[ $mp4boxerror =~ $Error ]]; then # if mp4box gives an error tell user
+						zenity --error --timeout="8" --text "$mp4boxerror, This file will not be created."
+
+						echo -e "File '$newname.mkv' $mp4boxerror, the file was skipped from the queue" "\n" >> log.txt
+
+						continue # continue next file if exists;;
+					fi
+					 
+					rm "$newname".264 "$newname"."$audioex" # remove temp files
+				else
+					continue # continue with next file if exists
+				fi
+			else
+				zenity --error --timeout="5" --text "Audio in  '$newname.mkv'  is not AAC! This file will not be created."
+				#echo -e "File '$newname.mkv' had an invalid or unknown audio stream, the file was skipped from the queue" "\n" >> log.txt
+				#continue # continue next file if exists
+				# convert audio
+			fi
+
+		else
+			zenity --error --timeout="5" --text "File  '$newname.mp4'  Already exists! This file will not be created."
+			echo -e "File '$newname.mp4' already existed, the file was skipped from the queue" "\n" >> log.txt
+			continue
+		fi
+	else
+		zenity --error --timeout="5" --text  "File  '$newname.mkv'  could not be identified as a Matroska file!  This file will not be created."
+		echo -e "File '$newname.mkv' could not be identified as a Matroska file, the file was skipped from the queue" "\n" >> log.txt
+		continue
+fi
+done

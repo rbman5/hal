@@ -1,0 +1,39 @@
+#!/bin/bash
+#
+
+if [ ! -d "/home/kzz5/.dme" ]; then
+	mkdir -pv ~/.dme/temp
+fi
+
+login=`curl -k -c /home/kzz5/.dme/cookie.txt https://www.download.me/dlapi/user?mail=dl\@kzz5.com\&passwd=password | grep premuntil`
+
+if [ ! -z "$login" ]; then
+
+	for arg
+	do
+
+	#wget --load-cookies /home/kzz5/.dme/cookie.txt --no-check-certificate https://www.download.me/dlapi/file?url=$arg -o ~/.dme/temp/getid
+	
+	curl -k -b ~/.dme/cookie.txt -o ~/.dme/temp/getid https://www.download.me/dlapi/file?url=$arg
+	
+	dlid=`cat ~/.dme/temp/getid | awk -F\" '{print $8}'`
+	
+	curl -k -b ~/.dme/cookie.txt -o ~/.dme/temp/geturl https://www.download.me/dlapi/file?id=$dlid
+	url=`cat ~/.dme/temp/geturl | awk -F\" '{print $20}'`
+	time=0
+	while [[ -z "$url" && "$time" -lt "25" ]]
+	do
+		sleep 3
+		curl -k -b ~/.dme/cookie.txt -o ~/.dme/temp/geturl https://www.download.me/dlapi/file?id=$dlid
+		url=`cat ~/.dme/temp/geturl | awk -F\" '{print $20}'`
+		time=$(( $time + 1))
+		echo $url
+		echo $time
+	done
+	cleanurl=$(echo $url | sed -e 's/\\//g')
+	echo $cleanurl
+	wget --load-cookies ~/.dme/cookie.txt -P ~/Downloads $cleanurl
+	echo $?
+	
+	done
+fi

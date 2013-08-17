@@ -1,0 +1,51 @@
+#!/bin/bash
+#
+function checkvideo {
+	checkvid=$(mediainfo "--Inform=General;%Format%" "$1")
+	if [ $checkvid = "AVC" ]; then
+		mux2mp4 "$1" "$2"
+	fi
+}
+function mux2mp4 {
+	checkaudio=$(mediainfo "--Inform=Audio;%Format%" "$2")
+	if [ $checkaudio = "AAC" ]; then
+		fps=$(mediainfo "--Inform=Video;%FrameRate%" "$1") # get fps of video
+		if [ -z $fps ]; then
+			fps="23.976"
+			zenity --info --timeout="3" --text "FPS for '$1' not found. Defaulted to 23.976"
+		fi
+		filename=$(echo ${1##*/}) # get file name with spaces
+		newname=${filename%.264} # cut off .mkv and a space after the mkv
+		if [ ! -f "$newname"".mp4" ]; then # if the mp4 doesn't already exist
+			mp4boxerror=$(MP4Box -add "$1":fps=$fps -add "$2" "$newname".mp4) # create mp4
+			Error="Error"
+			abort="Aborted"
+			if [[ $mp4boxerror =~ $Error ]]; then # if mp4box gives an error tell user
+
+			zenity --error --timeout="8" --text "$mp4boxerror, This file will not be created."
+			fi
+			if [[ $mp4boxerror =~ $abort ]];
+			zenity --error --timeout="8" --text "$mp4boxerror, This file will not be created."
+		
+			fi
+		else
+			zenity --error --timeout="8" --text "Output file already exists, exiting.."
+		fi
+	fi
+	exit	
+}
+i=0
+for arg
+do
+	let i=i+1
+	array[$i]=$arg
+done
+if [ $i = 2 ]; then
+	file1=$(echo ${array[1]})
+	file2=$(echo ${array[2]})
+	checkvideo "$file1" "$file2"
+	checkvideo "$file2" "$file1"
+	zenity --error --timeout="8" --text "Error could not make mp4 check audio and video streams"
+else
+	zenity --error --timeout="8" --text "Too many files selected, only 1 audio and 1 video accepeted"
+fi

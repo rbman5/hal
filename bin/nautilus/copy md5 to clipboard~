@@ -1,0 +1,16 @@
+#!/bin/bash
+
+# Check that the user didn't select directories
+for File in "$@"
+do
+if [ -d "$File" ]; then
+zenity --error --text="'$File' is a directory.
+Make md5 cannot handle directories."
+exit
+fi
+done
+
+md5=$(md5sum "$@")
+md5=${md5:0:32}
+echo $md5 | xclip -selection clipboard
+zenity --info --timeout="3" --text "md5 of $@ copied to clipboard"

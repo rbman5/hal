@@ -1,0 +1,24 @@
+#!/bin/sh
+
+#sudo rsync -av --delete /etc /home/kzz5/Encfs/enc_backup/$(hostname).$(grep CODE /etc/linuxmint/info | sed 's/\"//g' | sed 's/CODENAME\=//g')
+
+pc=`grep CODE /etc/linuxmint/info | sed 's/\"//g' | sed 's/CODENAME\=//g'`
+host=`hostname  | tr '[A-Z]' '[a-z]'`
+dir="/home/kzz5/Encfs/enc_backup"
+
+#rsync -av --delete --exclude '.gvfs' --exclude 'Steam' --exclude 'Trash'  /home/kzz5 /mnt/stuff/backup/$(awk '{ print $4 }' /etc/fedora-release | sed 's/(//' | sed 's/)//')
+
+sudo tar pzcvf $dir/$host.$pc/$host.$pc.etc.tgz /etc
+
+
+rsync -av --delete --exclude '.gvfs' --exclude 'Steam' --exclude 'SteamLibrary' --exclude '.cache' --exclude 'Encfs' /home/kzz5 $dir/$host.$pc
+
+
+#echo "Last sync ran $(date +'on %b %d at %H:%M')" > /mnt/stuff/backup/$(echo $HOSTNAME).$(grep DESC /etc/linuxmint/info | sed 's/\"//g' | sed 's/DESCRIPTION\=//g')
+#/sync.log
+
+#rsync -av --delete /etc /mnt/stuff/backup/$(awk '{ print $4 }' /etc/fedora-release | sed 's/(//' | sed 's/)//')
+
+echo "last sync ran $(date +'on %b %d at %H:%M')" > $dir/$host.$pc/sync.log
+
+#notify-send --hint=int:transient:1 "/home/kzz5 was rsyncd"

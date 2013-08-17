@@ -1,0 +1,9 @@
+#!/bin/sh
+
+rsync -av --delete --exclude '.gvfs' /home/kzz5 /mnt/Stuff/backup/$(awk '{ print $4 }' /etc/fedora-release | sed 's/(//' | sed 's/)//')
+
+echo "Last sync ran $(date +'on %b %d at %H:%M')" > /mnt/Stuff/backup/$(awk '{ print $4 }' /etc/fedora-release | sed 's/(//' | sed 's/)//')/sync.log
+rsync -av --delete /etc /mnt/Stuff/backup/$(awk '{ print $4 }' /etc/fedora-release | sed 's/(//' | sed 's/)//')
+
+echo "last sync ran $(date +'on %b %d at %H:%M')" > /mnt/Stuff/backup/$(awk '{ print $4 }' /etc/fedora-release | sed 's/(//' | sed 's/)//')/sync.log
+#notify-send --hint=int:transient:1 "/home/kzz5 was rsyncd"

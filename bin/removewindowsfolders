@@ -1,0 +1,9 @@
+#!/bin/bash
+
+rm -r /mnt/Stuff/System\ Volume\ Information
+rm -r /mnt/Stuff/\$RECYCLE.BIN
+rm -r /mnt/Stuff/msdownld.tmp
+
+rm -r /mnt/Stuff/Videos/System\ Volume\ Information
+rm -r /mnt/Stuff/Videos/\$RECYCLE.BIN
+rm -r /mnt/Stuff/Videos/msdownld.tmp

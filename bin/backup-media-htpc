@@ -1,0 +1,27 @@
+#!/bin/bash
+sshport=55255
+#if [ -d /mnt/htpcstuff/backup ]; then
+	#rsync -avr --exclude 'All' --exclude '.Trash' --exclude 'Ipod' --progress -e "ssh -p $sshport" /mnt/videos "kzz5@192.168.1.22:/mnt/htpcstuff"     # from pc to htpc
+	rsync -av --progress --exclude '.Trash*' --exclude 'Ipod' --inplace --rsh='ssh -p 55255' /mnt/videos/ kzz5@htpc:/mnt/htpcstuff/videos
+	#rsync -av --progress -e "ssh -p $sshport" "kzz5@192.168.1.22:/mnt/htpcstuff/videos/TV\ Shows" /mnt/videos     # from htpc to pc
+	#rsync -av  /mnt/Stuff/Music /mnt/rasp/
+	rsync -av --progress --exclude '.Trash*' --inplace --rsh='ssh -p 55255' /mnt/stuff/Music/ kzz5@htpc:/mnt/htpcstuff/Music
+	rsync -av --progress --exclude '.Trash*' --exclude 'My Virtual Machines' --exclude 'Virtual Machines' --inplace --rsh='ssh -p 55255' /mnt/stuff/Documents/ kzz5@htpc:/mnt/htpcstuff/Documents
+	rsync -av --progress --exclude '.Trash*' --inplace --rsh='ssh -p 55255' /mnt/stuff/linux/ kzz5@htpc:/mnt/htpcstuff/linux
+	rsync -av --progress --exclude '.Trash*' --inplace --rsh='ssh -p 55255' /mnt/stuff/360/ kzz5@htpc:/mnt/htpcstuff/360
+	rsync -av --progress --exclude '.Trash*' --inplace --rsh='ssh -p 55255' /mnt/stuff/Games kzz5@htpc:/mnt/htpcstuff/Games
+	echo "last sync ran $(date +'on %b %d at %H:%M')" > ~/logs/htpc_media_sync.log
+	#rsync -av --progress --exclude '.Trash*' --inplace --rsh='ssh -p 55255' /mnt/Stuff/Android/Music/ kzz5@kzz5-htpc:/mnt/htpcstuff/Android/Music
+#fi
+
+#rsync -av --delete /mnt/Stuff/Videos /mnt/htpcstuff/
+#rsync -av --delete /mnt/Stuff/Music /mnt/htpcstuff/
+#rsync -av --progress --exclude '.Trash*' --exclude 'Ipod' --inplace --rsh='ssh -p 55255' /mnt/Videos/ kzz5@kzz5-htpc:/mnt/htpcstuff/Videos
+	##rsync -av --progress -e "ssh -p $sshport" "kzz5@192.168.1.22:/mnt/htpcstuff/Videos/TV\ Shows" /mnt/Videos     # from htpc to pc
+	##rsync -av  /mnt/Stuff/Music /mnt/htpcstuff/
+	#rsync -av --progress --exclude '.Trash*' --inplace --rsh='ssh -p 55255' /mnt/Stuff/Music/ kzz5@kzz5-htpc:/mnt/htpcstuff/Music
+	#rsync -av --progress --exclude '.Trash*' --exclude 'My Virtual Machines' --exclude 'Virtual Machines' --inplace --rsh='ssh -p 55255' /mnt/Stuff/Documents/ kzz5@kzz5-htpc:/mnt/htpcstuff/Documents
+	#rsync -av --progress --exclude '.Trash*' --inplace --rsh='ssh -p 55255' /mnt/Stuff/linux/ kzz5@kzz5-htpc:/mnt/htpcstuff/linux
+	#rsync -av --progress --exclude '.Trash*' --inplace --rsh='ssh -p 55255' /mnt/Stuff/360/ kzz5@kzz5-htpc:/mnt/htpcstuff/360
+	#rsync -av --progress --exclude '.Trash*' --inplace --rsh='ssh -p 55255' /mnt/Stuff/Games kzz5@kzz5-htpc:/mnt/htpcstuff/Games
+	

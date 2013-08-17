@@ -1,0 +1,3 @@
+#!/bin/bash
+#
+shnsplit -f "$1".cue -o flac -t "%n - %t" "$1".flac < "$1".cue

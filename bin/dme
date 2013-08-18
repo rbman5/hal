@@ -22,7 +22,8 @@ function login {
 	check=$(echo $login | grep premuntil)
 	if [ ! -z "$check" ]; then
 		log "$login" "Successful login" "1"
-		checkhost "$1"
+		getid "$"
+		#checkhost "$1"
 	else
 		log "$login" "Error logging in or no premium" "1"
 		echo Error logging in $login

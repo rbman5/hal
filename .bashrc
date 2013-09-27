@@ -11,8 +11,8 @@ PS1="\[$(tput setaf 1)\]\u $(tput setaf 3)>$(tput setaf 1)$(hostname | tr '[A-Z]
 #PS1="\e[0;31m \u >> \e[m\W $ "
 
 eval `dircolors -b ~/.dir_colors`
-
-alias gp="git add ~/.bashrc ~/bin ~/.dir_colors ~/.mybashsetup.sh && git commit -m 'hi' && git push origin master"
+alias gp="cd ~/hal && git push && cd -"
+alias gp2="git add ~/.bashrc ~/bin ~/.dir_colors ~/hal/.mybashsetup.sh && git commit -m 'hi' && git push origin master"
 alias gitbash="rm -rf ~/hal && git clone https://github.com/rbman5/hal.git && cd ~/hal && chmod +x .mybashsetup.sh && ./.mybashsetup.sh && cd && . .bashrc"
 alias ls="ls --color=auto"
 alias htpc="ssh htpc -X"

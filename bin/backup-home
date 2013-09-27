@@ -4,7 +4,12 @@
 
 pc=`grep CODE /etc/linuxmint/info | sed 's/\"//g' | sed 's/CODENAME\=//g'`
 host=`hostname  | tr '[A-Z]' '[a-z]'`
-dir="/home/kzz5/Encfs/enc_backup"
+dir="/$host/backup"
+
+if [ ! -d "/$host/backup/$host.$pc" ]; then
+	mkdir -pv /$host/backup/$host.$pc
+fi
+
 
 #rsync -av --delete --exclude '.gvfs' --exclude 'Steam' --exclude 'Trash'  /home/kzz5 /mnt/stuff/backup/$(awk '{ print $4 }' /etc/fedora-release | sed 's/(//' | sed 's/)//')
 

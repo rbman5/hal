@@ -83,7 +83,7 @@ function download {
 	echo "Starting download.."
 	cleanurl=$(echo $1 | sed -e 's/\\//g')
 	log "$cleanurl" "is being downloaded now" "1"
-	wget -c --load-cookies ~/.dme/cookie.txt -P ~/Downloads $cleanurl
+	wget -c --load-cookies ~/.dme/cookie.txt $cleanurl
 	wgetexitstatus=$?
 	log "$wgetexitstatus" "exit status of final wget command" "1"
 }

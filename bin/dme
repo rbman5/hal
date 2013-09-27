@@ -92,8 +92,10 @@ function log {
 
 	if [ "$3" = "1" ]; then
 		echo " $1" $2  | sed "s/^/$(date)/" >> ~/.dme/dme.log
+		echo " $1" $2  | sed "s/^/$(date)/"
 	else
 		echo " $1" $2 >> ~/.dme/dme.log
+		echo " 1$" $2
 	fi
 }
 

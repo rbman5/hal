@@ -55,6 +55,7 @@ alias oct="stat -c %a %n"
 alias ed="export DISPLAY=:0"
 alias screenvnc="screen xllvnc -display :0"
 alias nautilus="nemo"
+alias s="screen"
 alias wget='wget -c'
 alias localinstall='sudo yum localinstall --nogpgcheck'
 alias htpcnox='ssh htpc'

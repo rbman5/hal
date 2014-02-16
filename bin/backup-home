@@ -16,7 +16,7 @@ fi
 sudo tar pzcvf $dir/$host.$pc/$host.$pc.etc.tgz /etc
 
 
-rsync -av --delete --exclude '.gvfs' --exclude 'Steam' --exclude 'SteamLibrary' --exclude '.cache' --exclude 'Encfs' /home/kzz5 $dir/$host.$pc
+rsync -av --delete --exclude '.gvfs' --exclude 'Steam' --exclude 'SteamLibrary' --exclude '.cache' --exclude 'Dropbox' --exclude 'VirtualBox VMs' --exclude 'Encfs' /home/kzz5 $dir/$host.$pc
 
 
 #echo "Last sync ran $(date +'on %b %d at %H:%M')" > /mnt/stuff/backup/$(echo $HOSTNAME).$(grep DESC /etc/linuxmint/info | sed 's/\"//g' | sed 's/DESCRIPTION\=//g')

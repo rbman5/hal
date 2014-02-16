@@ -1,0 +1,6 @@
+#!/bin/bash
+pc=`grep CODE /etc/linuxmint/info | sed 's/\"//g' | sed 's/CODENAME\=//g'`
+host=`hostname  | tr '[A-Z]' '[a-z]'`
+dir="/$host/backup"
+
+rsync -avzh root@rss:/var/www /$dir/rss/"$(date)"

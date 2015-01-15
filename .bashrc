@@ -22,9 +22,10 @@ alias terminus="ssh terminus -X -A"
 alias terminusinternet="ssh terminus.kzz5.com -X"
 alias pi="ssh pi@tardis"
 alias piinternet="ssh pi@tardis.kzz5.com"
-alias down="cd /$(hostname | tr '[A-Z]' '[a-z]')stuff/Downloads"
+alias down="cd /iss/Downloads"
 alias du="du --apparent-size"
 alias fixbash="PS1='\u $(hostname | tr '[A-Z]' '[a-z]') \w  >> '"
+alias sls="screen -ls"
 fixbash
 ###########################
 alias vpn="sudo pon work && sleep 5  && ifconfig | grep ppp"
@@ -72,6 +73,9 @@ alias yumup="sudo apt-get update"
 alias yumrein="sudo apt-get install --reinstall"
 alias yumf="sudo apt-get install -f"
 
+function sr () {
+	screen -r $(screen -ls | awk '{print $1}' | sed '1d;$d' | head -n -1 | sed -n $1p)
+}
 function extract () {
 	PWD="`pwd`"
 	echo $PWD
